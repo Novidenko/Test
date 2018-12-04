@@ -1,0 +1,93 @@
+void setup() {
+  // put your setup code here, to run once:
+
+}
+
+void loop() {
+  // put your main code here, to run repeatedly:
+  UART_Begin(SERIAL1,115200);
+  UART_PrintStr(SERIAL1,"AT\r\n");
+  COM_Printf("%d\n",11111111);
+    while(1)
+    {
+         if(UART_Available(SERIAL1)>0)
+                    {
+                        char a=UART_Read(SERIAL1); 
+                        COM_Printf("%c",a);
+                        delay(10);
+                        if ( a=='\n'||a==' ')
+                        {
+                           UART_PrintStr(SERIAL1,"AT\r\n");
+                           delay(100);
+                        }  
+                    }
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#include "main.h"
+#include <stdlib.h>
+#include <stdio.h>
+#include <inttypes.h>
+#include "mstn_version.h"
+#include "mstn_led.h"
+#include "mstn_clk.h"
+#include "mstn_usb.h"
+#include "mstn_uart.h"
+
+int main(int argc, char *argv[])
+{
+ 
+    int cnt=0;
+UART_Begin(SERIAL1,115200);
+UART_PrintStr(SERIAL1,"AT\r\n");
+    while(1)
+    {
+         if(UART_Available(SERIAL1)>0)
+                    {
+                        char a=UART_Read(SERIAL1); 
+                        printf("%c",a);
+                        if ( a=='\n')
+                        {
+                            switch(cnt)
+                            
+                            {
+                                case 0:UART_PrintStr(SERIAL1,"AT\r\n");
+                                break;
+                                case 1:UART_PrintStr(SERIAL1,"AT+CWMODE=1\r\n");
+                                break;
+                                case 2:UART_PrintStr(SERIAL1,"AT+CWLAP\r\n");
+                                break;
+                                default: while(1){};
+                                break;
+                            }
+                            cnt++;
+                        }  
+                    }
+           // UART_Write(SERIAL1,a);
+           //}   
+
+    }
+}
